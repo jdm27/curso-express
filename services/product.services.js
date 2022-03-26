@@ -54,6 +54,23 @@ class ProductsService {
 
   }
 
+  updatePatch(id, data) {
+    var index = this.products.indexOf(this.findOne(id));
+    if (index !== -1) {
+      const product = this.products[index];
+      this.products[index] = { ...product, ...data, };
+      return this.products[index];
+    }
+    else {
+
+      return null;
+    }
+
+
+  }
+
+
+
   delete(id) {
     var i = this.products.indexOf(this.findOne(id));
 

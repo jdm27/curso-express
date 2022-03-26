@@ -25,13 +25,9 @@ router.get('/:id', (req, res) => {
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.json(
-    {
-      message: 'Updated',
-      id,
-      data: body
-    }
-  );
+  const product = service.updatePatch(id, body);
+  const result = product ? () => res.status(201).json({ message: 'Updated', data: product }) : () => res.status(404).json('Not found');
+  result();
 })
 
 router.put('/:id', (req, res) => {
