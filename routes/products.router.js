@@ -1,54 +1,25 @@
 const express = require('express');
-const faker = require('faker');
-
+const ProductsService = require('./../services/product.services');
 const router = express.Router();
+const service = new ProductsService();
 
 
 router.get('/', (req, res) => {
-  const products = [];
-  const { size } = req.query;
-  const limit = size || 10;
-  for (let index = 0; index < limit; index++) {
-    products.push({
-      name: faker.commerce.productName(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl(),
-
-    })
-
-  }
+  const products = service.find();
   res.json(products);
 });
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.status(201).json( // status code agregado
-    {
-      message: 'Created',
-      data: body
-    }
-  );
+  const product = service.create(body);
+  const result = product ? () => res.status(201).json({ message: 'Created' }) : () => res.status(404).json('Valor is null');
+  result(); //ver false
 })
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  if (id === '999') {
-    res.status(404).json( // status code agregado
-      {
-        message: 'not found'
-      }
-    );
-  }
-  else {
-    res.status(200).json(
-      {
-        id,
-        name: "Product by id",
-        price: 2000
-      }
-    )
-  }
-
+  const product = service.findOne(id);
+  res.json(product);
 })
 
 router.patch('/:id', (req, res) => {
@@ -66,23 +37,18 @@ router.patch('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.json(
-    {
-      message: 'Updated',
-      id,
-      data: body
-    }
-  );
+  const product = service.update(id, body);
+  const result = product ? () => res.status(201).json({ message: 'Updated', data: product }) : () => res.status(404).json('Not found');
+  result();
+
 })
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.json(
-    {
-      message: 'Deleted',
-      id
-    }
-  );
+  const product = service.delete(id);
+  const result = product ? () => res.status(201).json('Deleted') : () => res.status(404).json('Not found');
+  result();
+
 })
 
 
