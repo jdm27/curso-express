@@ -4,46 +4,64 @@ const router = express.Router();
 const service = new ProductsService();
 
 
-router.get('/', (req, res) => {
-  const products = service.find();
+router.get('/', async (req, res) => {
+  const products = await service.find();
   res.json(products);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const body = req.body;
-  const product = service.create(body);
+  const product = await service.create(body);
   const result = product ? () => res.status(201).json({ message: 'Created' }) : () => res.status(404).json('Valor is null');
   result(); //ver false
 })
 
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const product = service.findOne(id);
-  res.json(product);
-})
-
-router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const product = service.updatePatch(id, body);
-  const result = product ? () => res.status(201).json({ message: 'Updated', data: product }) : () => res.status(404).json('Not found');
-  result();
-})
-
-router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const product = service.update(id, body);
-  const result = product ? () => res.status(201).json({ message: 'Updated', data: product }) : () => res.status(404).json('Not found');
-  result();
+router.get('/:id', async (req, res) => { //HECHO
+  try {
+    const { id } = req.params;
+    const product = await service.findOne(id);
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 
 })
 
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const product = service.delete(id);
-  const result = product ? () => res.status(201).json('Deleted') : () => res.status(404).json('Not found');
-  result();
+router.patch('/:id', async (req, res) => { //HECHO
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const product = await service.updatePatch(id, body);
+    res.status(201).json({ message: 'Updated', data: product });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+
+})
+
+router.put('/:id', async (req, res) => { //HECHO
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const product = await service.update(id, body);
+    res.status(201).json({ message: 'Updated', data: product })
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+})
+
+router.delete('/:id', async (req, res) => { //HECHO
+  try {
+    const { id } = req.params;
+    const product = await service.delete(id);
+    if (product) {
+      res.status(201).json('Deleted')
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+
+
 
 })
 
