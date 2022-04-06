@@ -16,41 +16,42 @@ router.post('/', async (req, res) => {
   result(); //ver false
 })
 
-router.get('/:id', async (req, res) => { //HECHO
+router.get('/:id', async (req, res, next) => { //HECHO
   try {
     const { id } = req.params;
     const product = await service.findOne(id);
     res.status(201).json(product);
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    next(error);
+
   }
 
 })
 
-router.patch('/:id', async (req, res) => { //HECHO
+router.patch('/:id', async (req, res, next) => { //HECHO
   try {
     const { id } = req.params;
     const body = req.body;
     const product = await service.updatePatch(id, body);
     res.status(201).json({ message: 'Updated', data: product });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    next(error);
   }
 
 })
 
-router.put('/:id', async (req, res) => { //HECHO
+router.put('/:id', async (req, res, next) => { //HECHO
   try {
     const { id } = req.params;
     const body = req.body;
     const product = await service.update(id, body);
     res.status(201).json({ message: 'Updated', data: product })
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    next(error);
   }
 })
 
-router.delete('/:id', async (req, res) => { //HECHO
+router.delete('/:id', async (req, res, next) => { //HECHO
   try {
     const { id } = req.params;
     const product = await service.delete(id);
@@ -58,10 +59,8 @@ router.delete('/:id', async (req, res) => { //HECHO
       res.status(201).json('Deleted')
     }
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    next(error);;
   }
-
-
 
 })
 

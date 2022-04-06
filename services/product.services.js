@@ -1,4 +1,5 @@
 const faker = require('faker');
+const boom = require('@hapi/boom');
 
 class ProductsService {
   constructor() {
@@ -15,6 +16,7 @@ class ProductsService {
         name: faker.commerce.productName(),
         price: parseInt(faker.commerce.price(), 10),
         image: faker.image.imageUrl(),
+        isBlock: faker.datatype.boolean()
 
       })
 
@@ -37,30 +39,32 @@ class ProductsService {
   }
 
   async findOne(id) {
+    //const name = this.getTotal();
     const product = this.products.find(item => item.id === id);
-    if (product) {
-      return product;
+    if (!product) {
+      throw boom.notFound('Product not found');
     }
-    else {
-      throw new Error('Product not found');
+    if (product.isBlock) {
+      throw boom.conflict('Product is block');
     }
+    return product;
 
   }
 
 
-  async update(id, data) {
+  async update(id, data) { //HECHO
     var index = this.products.indexOf(await this.findOne(id));
     if (index !== -1) {
       this.products[index] = data;
       return this.products[index];
     }
     else {
-      throw new Error('Product not found');
+      throw boom.notFound('Product not found');
     }
 
   }
 
-  async updatePatch(id, data) {
+  async updatePatch(id, data) { //HECHO
     var index = this.products.indexOf(await this.findOne(id));
     if (index !== -1) {
       const product = this.products[index];
@@ -68,8 +72,7 @@ class ProductsService {
       return this.products[index];
     }
     else {
-
-      return null;
+      throw boom.notFound('Product not found');
     }
 
 
@@ -77,7 +80,7 @@ class ProductsService {
 
 
 
-  async delete(id) {
+  async delete(id) {//HECHO
     var i = this.products.indexOf(await this.findOne(id));
 
     if (i !== -1) {
@@ -85,7 +88,7 @@ class ProductsService {
       return true;
     }
     else {
-      return false;
+      throw boom.notFound('Product not found');
     }
 
   }
