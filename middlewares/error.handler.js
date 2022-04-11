@@ -6,7 +6,6 @@ function logErrors(err, req, res, next) {
 }
 
 
-
 function boomErrorHandler(err, req, res, next) {
   if (err.isBoom) {
     const { output } = err;
@@ -15,7 +14,6 @@ function boomErrorHandler(err, req, res, next) {
   next(err);
 }
 
-
 function errorHandler(err, req, res, next) {
   console.log('errorHandler');
   res.status(500).json({
@@ -23,6 +21,7 @@ function errorHandler(err, req, res, next) {
     stack: err.stack
   });
 }
+
 
 module.exports = { logErrors, errorHandler, boomErrorHandler }
 
