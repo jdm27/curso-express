@@ -1,4 +1,4 @@
-const boom = require("@hapi/boom");
+const boom = require("@hapi/boom"); //importamos boom que nos permite enviar de forma dinamica el error.
 
 function validatorHandler(schema, property) {
   //se crea un middleware de forma dinamica, buen ejemplo del uso de un clojure.
