@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const routerApi = require('./routes');
 const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
 
@@ -7,6 +8,7 @@ const port = 3200;
 //const IP = '192.168.0.32';
 
 app.use(express.json()); //midleware
+app.use(cors());
 
 routerApi(app);
 app.use(logErrors);
