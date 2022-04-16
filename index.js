@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+//const cors = require('cors');
 const routerApi = require('./routes');
 const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
 
@@ -8,9 +8,22 @@ const port = 3200;
 //const IP = '192.168.0.32';
 
 app.use(express.json()); //midleware
-app.use(cors());
+/*
+const whitelist = ['http://127.0.0.1:5500', 'http://localhost:5500'];
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('no permitido'), false);
+    }
+  }
+}
+*/
 
 routerApi(app);
+
+//app.use(cors(options));
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
@@ -28,16 +41,5 @@ app.get('/', (req, res) => {
 
 
 
-/*
-app.get('/products/:id',(req,res)=>{
-    const {id}=req.params;
-
-    res.json({
-        id,
-        name: 'INTEL 1200 CORE I3 10100F',
-        price:12999.99
-    });
-})
-*/
 
 
