@@ -4,10 +4,10 @@ const routerApi = require('./routes');
 const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
 
 const app = express();
-const port = 3200;
+const port = process.env.PORT || 3200;
 //const IP = '192.168.0.32';
 
-app.use(express.json()); //midleware
+
 /*
 const whitelist = ['http://127.0.0.1:5500', 'http://localhost:5500'];
 const options = {
@@ -23,7 +23,10 @@ const options = {
 
 routerApi(app);
 
+
+//midlewares
 //app.use(cors(options));
+app.use(express.json()); //midleware
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
