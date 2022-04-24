@@ -8,7 +8,8 @@ async function getConnection() {
     password: 'admin123',
     database: 'my_store'
   });
-  await client.connect();
+  await client.connect(); // nos da una promesa como retorno
+  // por eso hay que asignarle el await
   return client;
 }
 
