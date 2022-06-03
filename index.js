@@ -2,9 +2,14 @@ const express = require('express');
 //const cors = require('cors');
 const routerApi = require('./routes');
 const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
+const bp = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 3200;
+
+
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 //const IP = '192.168.0.32';
 
 
@@ -26,10 +31,12 @@ routerApi(app);
 
 //midlewares
 //app.use(cors(options));
+
 app.use(express.json()); //midleware
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
+
 
 app.listen(port, () => {
   console.log('port:' + port);
